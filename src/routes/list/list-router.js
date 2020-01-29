@@ -37,7 +37,7 @@ listRouter
                 res
                     .status(201)
                     //.location(`/list/${list.id}`)
-                    .location(path.posix.join(req.originalUrl, `/${event.id}`))
+                    .location(path.posix.join(req.originalUrl, `/${list.id}`))
                     .json(list)
             })
             .catch(next)
@@ -45,7 +45,7 @@ listRouter
 
 listRouter
     .route('/:list_id')
-    .get((req, res, next) => {
+    .all((req, res, next) => {
         ListService.getById(
             req.app.get('db'),
             req.params.list_id
@@ -56,14 +56,40 @@ listRouter
                         error: {message: `List doesn't exist`}
                     })
                 }
-                res.json(ListService.serializeList(list))
+                res.list = list
+                next()
             })
             .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json(ListService.serializeList(res.list))
     })
     .delete((req, res, next) => {
         ListService.deleteListById(
             req.app.get('db'),
             req.params.list_id
+        )
+            .then(() => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
+    .patch(jsonParser, (req, res, next) => {
+        const {list_name} = req.body;
+        const listToUpdate = {list_name};
+
+        const numberOfValues = Object.values(listToUpdate).filter(Boolean).length;
+        if(numberOfValues === 0) {
+            return res.status(400).json({
+                error: {message: `Request body must contain 'list_name'`}
+            })
+        }
+
+        //res.status(204).end()
+        ListService.updateListById(
+            req.app.get('db'),
+            req.params.list_id,
+            listToUpdate
         )
             .then(() => {
                 res.status(204).end()

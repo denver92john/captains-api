@@ -41,6 +41,11 @@ const ListService = {
             .where({id})
             .delete()
     },
+    updateListById(db, id, newListFields) {
+        return db('captains_lists')
+            .where({id})
+            .update(newListFields)
+    },
     serializeList(list) {
         const {user} = list;
         return {
