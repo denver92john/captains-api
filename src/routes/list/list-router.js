@@ -60,5 +60,15 @@ listRouter
             })
             .catch(next)
     })
+    .delete((req, res, next) => {
+        ListService.deleteListById(
+            req.app.get('db'),
+            req.params.list_id
+        )
+            .then(() => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
 
 module.exports = listRouter;

@@ -36,6 +36,11 @@ const ListService = {
                 return rows[0]
             })
     },
+    deleteListById(db, id) {
+        return db('captains_lists')
+            .where({id})
+            .delete()
+    },
     serializeList(list) {
         const {user} = list;
         return {
