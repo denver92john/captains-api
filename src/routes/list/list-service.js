@@ -22,6 +22,7 @@ const ListService = {
             )
             //.groupBy('list.id', 'usr.id')
     },
+    //getListsByUserId(db, userId) {},
     getById(db, id) {
         return ListService.getAllLists(db)
             .where('list.id', id)
