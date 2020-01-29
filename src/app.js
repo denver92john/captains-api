@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const {NODE_ENV} = require('./config');
-const ListService = require('./ListService');
+const listRouter = require('./routes/list/list-router');
 
 const app = express();
 
@@ -14,13 +14,7 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'dev', {
 app.use(helmet());
 app.use(cors());
 
-app.get('/api/list', (req, res, next) => {
-    ListService.getAllLists(req.app.get('db'))
-        .then(lists => {
-            res.json(lists)
-        })
-        .catch(next)
-})
+app.use('/api/list', listRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, world!')
