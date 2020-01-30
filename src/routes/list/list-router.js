@@ -27,6 +27,8 @@ listRouter
             }
         }
 
+        //cuz attaching user.id to req obj in auth
+        //newList.user_id = req.user.id
         newList.user_id = user_id
 
         ListService.insertList(
