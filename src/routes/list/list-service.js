@@ -22,7 +22,10 @@ const ListService = {
             )
             //.groupBy('list.id', 'usr.id')
     },
-    //getListsByUserId(db, userId) {},
+    getListsByUserId(db, userId) {
+        return ListService.getAllLists(db)
+            .where('usr.id', userId)
+    },
     getById(db, id) {
         return ListService.getAllLists(db)
             .where('list.id', id)

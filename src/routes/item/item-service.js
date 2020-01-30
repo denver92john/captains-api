@@ -23,23 +23,7 @@ const ItemService = {
             )
     },
     getItemsByListId(db, listId) {
-        return db
-            .from('captains_items AS item')
-            .select(
-                'item.id',
-                'item.item_name',
-                db.raw(
-                    `json_build_object(
-                        'id', ls.id,
-                        'list_name', ls.list_name
-                    ) AS "list"`
-                )
-            )
-            .leftJoin(
-                'captains_lists AS ls',
-                'item.list_id',
-                'ls.id'
-            )
+        return ItemService.getAllItems(db)
             .where('ls.id', listId)
     },
     getByItemId(db, id) {

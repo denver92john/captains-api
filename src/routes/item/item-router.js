@@ -1,14 +1,17 @@
 const path = require('path');
 const express = require('express');
 const ItemService = require('./item-service');
+const {requireAuth} = require('../../middleware/jwt-auth');
 
 const itemRouter = express.Router();
 const jsonParser = express.json();
 
 // get rid of GET '/', and GET '/:item_id'
+// on client side see if there is way to use GET /item instead of /item/list/:list_id to get all items for list
 
 itemRouter
     .route('/')
+    .all(requireAuth)
     .get((req, res, next) => {
         ItemService.getAllItems(req.app.get('db'))
             .then(items => {
@@ -43,7 +46,7 @@ itemRouter
 
 itemRouter
     .route('/:item_id')
-    .all((req, res, next) => {
+    .all(requireAuth, (req, res, next) => {
         ItemService.getByItemId(
             req.app.get('db'),
             req.params.item_id
@@ -93,7 +96,6 @@ itemRouter
             })
             .catch(next)
     })
-
 
 itemRouter
     .get('/list/:list_id', (req, res, next) => {

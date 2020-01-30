@@ -6,19 +6,22 @@ const {requireAuth} = require('../../middleware/jwt-auth');
 const listRouter = express.Router();
 const jsonParser = express.json();
 
-// can get rid of GET /api/list but still add GET /api/list/user/:user_id
+// can probably get rid of GET /:list_id
 
 listRouter
     .route('/')
+    .all(requireAuth)
     .get((req, res, next) => {
-        ListService.getAllLists(req.app.get('db'))
+        ListService.getListsByUserId(
+                req.app.get('db'),
+                req.user_id
+        )
             .then(lists => {
                 res.json(lists.map(ListService.serializeList))
             })
             .catch(next)
     })
-    .post(requireAuth, jsonParser, (req, res, next) => {
-        // will remove user_id from request body in future
+    .post(jsonParser, (req, res, next) => {
         const {list_name} = req.body;
         const newList = {list_name};
 
@@ -30,7 +33,6 @@ listRouter
             }
         }
 
-        //cuz attaching user.id to req obj in auth
         newList.user_id = req.user_id
 
         ListService.insertList(
@@ -40,7 +42,6 @@ listRouter
             .then(list => {
                 res
                     .status(201)
-                    //.location(`/list/${list.id}`)
                     .location(path.posix.join(req.originalUrl, `/${list.id}`))
                     .json(list)
             })
