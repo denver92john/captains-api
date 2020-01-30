@@ -8,7 +8,7 @@ TRUNCATE
 
 INSERT INTO captains_users (username, password)
 VALUES
-    ('JDenver', 'JDenver1!');
+    ('JDenver', '$2a$12$di5w7VrQbqvUswwBppcu3.oYWi1bALO4i1A7sXp/xJC3ScNjWCFYG');
 
 INSERT INTO captains_lists (list_name, user_id)
 VALUES
