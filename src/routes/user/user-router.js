@@ -61,6 +61,7 @@ userRouter
                             })
                     })
             })
+            .catch(next)
     })
 
 module.exports = userRouter;

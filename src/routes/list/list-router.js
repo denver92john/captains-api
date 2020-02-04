@@ -6,8 +6,6 @@ const {requireAuth} = require('../../middleware/jwt-auth');
 const listRouter = express.Router();
 const jsonParser = express.json();
 
-// can probably get rid of GET /:list_id
-
 listRouter
     .route('/')
     .all(requireAuth)
@@ -18,6 +16,7 @@ listRouter
         )
             .then(lists => {
                 res.json(lists.map(ListService.serializeList))
+                //res.json(lists)
             })
             .catch(next)
     })
@@ -43,7 +42,7 @@ listRouter
                 res
                     .status(201)
                     .location(path.posix.join(req.originalUrl, `/${list.id}`))
-                    .json(list)
+                    .json(ListService.serializeList(list))
             })
             .catch(next)
     })

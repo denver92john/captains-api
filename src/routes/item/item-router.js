@@ -39,7 +39,7 @@ itemRouter
                 res
                     .status(201)
                     .location(path.posix.join(req.originalUrl, `/${item.id}`))
-                    .json(item)
+                    .json(ItemService.serializeItem(item))
             })
             .catch(next)
     })

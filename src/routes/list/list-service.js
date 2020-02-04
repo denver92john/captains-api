@@ -7,24 +7,12 @@ const ListService = {
             .select(
                 'list.id',
                 'list.list_name',
-                //'list.user_id'
-                db.raw(
-                    `json_build_object(
-                        'id', usr.id,
-                        'username', usr.username
-                    ) AS "user"`
-                )
+                'list.user_id'
             )
-            .leftJoin(
-                'captains_users AS usr',
-                'list.user_id',
-                'usr.id'
-            )
-            //.groupBy('list.id', 'usr.id')
     },
     getListsByUserId(db, userId) {
         return ListService.getAllLists(db)
-            .where('usr.id', userId)
+            .where('list.user_id', userId)
     },
     getById(db, id) {
         return ListService.getAllLists(db)
@@ -51,16 +39,29 @@ const ListService = {
             .update(newListFields)
     },
     serializeList(list) {
-        const {user} = list;
         return {
             id: list.id,
             list_name: xss(list.list_name),
-            user: {
-                id: user.id,
-                username: xss(user.username)
-            }
+            user_id: list.user_id
         }
     }
 }
 
 module.exports = ListService;
+
+
+
+/*
+                db.raw(
+                    `json_build_object(
+                        'id', usr.id,
+                        'username', usr.username
+                    ) AS "user"`
+                )
+            )
+            .leftJoin(
+                'captains_users AS usr',
+                'list.user_id',
+                'usr.id'
+            )
+*/
