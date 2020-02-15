@@ -2,15 +2,12 @@ const express = require('express');
 const path = require('path');
 const UserService = require('./user-service');
 
-// using thingful-server as reference
-
 const userRouter = express.Router();
 const jsonParser = express.json();
 
 userRouter
     .post('/', jsonParser, (req, res, next) => {
         const {username, password, re_password} = req.body;
-        //const newUser = {username, password, re_password};
 
         for (const field of ['username', 'password', 're_password']) {
             if (!req.body[field]) {
