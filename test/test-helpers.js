@@ -77,7 +77,17 @@ function makeExpectedList(user, list) {
     }
 }
 
-//function makeExpectedItems(list, items=[]) {}
+function makeExpectedListItems(list_id, items) {
+    const expectedItems = items
+        .filter(item => item.list_id === list_id)
+    return expectedItems.map(item => {
+        return {
+            id: item.id,
+            item_name: item.item_name,
+            list_id: item.list_id
+        }
+    })
+}
 
 function makeListsFixtures() {
     const testUser = makeUser();
@@ -152,6 +162,7 @@ module.exports = {
     makeListArray,
     makeItemArray,
     makeExpectedList,
+    makeExpectedListItems,
     makeListsFixtures,
     cleanTables,
     seedUser,

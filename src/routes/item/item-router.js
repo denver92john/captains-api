@@ -6,9 +6,6 @@ const {requireAuth} = require('../../middleware/jwt-auth');
 const itemRouter = express.Router();
 const jsonParser = express.json();
 
-// get rid of GET '/', and GET '/:item_id'
-// on client side see if there is way to use GET /item instead of /item/list/:list_id to get all items for list
-
 itemRouter
     .route('/')
     .all(requireAuth)
@@ -61,9 +58,6 @@ itemRouter
                 next()
             })
             .catch(next)
-    })
-    .get((req, res, next) => {
-        res.json(ItemService.serializeItem(res.item))
     })
     .delete((req, res, next) => {
         ItemService.deleteItemById(

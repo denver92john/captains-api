@@ -1,5 +1,5 @@
 # Captains API
-[Live version](https://captains.now.sh/)
+[Live version](https://captains.now.sh/)  <br />
 This API for the Captains app is used to assist users in creating a set of random teams based on a list of names they've created.
 
 ## Dependencies

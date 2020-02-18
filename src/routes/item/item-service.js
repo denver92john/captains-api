@@ -1,7 +1,5 @@
 const xss = require('xss');
 
-// get rid of getAllItems and make use of the other methods
-
 const ItemService = {
     getAllItems(db) {
         return db

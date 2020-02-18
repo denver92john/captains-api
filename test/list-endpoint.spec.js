@@ -11,19 +11,7 @@ describe('List endpoint', () => {
         testItems
     } = helpers.makeListsFixtures()
 
-    before('make knex instance', () => {
-        db = knex({
-            client: 'pg',
-            connection: process.env.TEST_DATABASE_URL
-        })
-        app.set('db', db)
-    })
-
-    after('disconnect from db', () => db.destroy())
-
-    before('cleanup', () => helpers.cleanTables(db))
-
-    afterEach('cleanup', () => helpers.cleanTables(db))
+    
 
     describe('GET /api/list', () => {
         context('Given no lists', () => {
