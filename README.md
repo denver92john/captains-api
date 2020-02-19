@@ -19,6 +19,40 @@ This API for the Captains app is used to assist users in creating a set of rando
 *   `user` - This folder inside the routes folder contains the user router and service object that handles user endpoint requests. Creating new users.
 *   `middleware` - This folder contains the authentication logic.
 
+## API Endpoints
+### POST /api/auth/login
+Logs in the user and creates json web token.
+The response:
+    {
+        "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1ODIxMzYyMTMsInN1YiI6IkpEZW52ZXIifQ.qM6nbtkCWeik-MwrZG5GhXtmCEUPeTU4kGO32RYFTnE",
+        "user": {
+            "id": 1,
+            "username": "JDenver"
+        }
+    }
+
+### GET /api/item
+
+### POST /api/item
+
+### DELETE /api/item/:item_id
+
+### PATCH /api/item/:item_id
+
+### GET /api/item/list/:list_id
+
+### GET /api/list
+
+### POST /api/list
+
+### GET /api/list/:list_id
+
+### DELETE /api/list/:list_id
+
+### PATCH /api/list/:list_id
+
+### POST /api/user
+
 ## Technologies
 *   Express
 *   Node
