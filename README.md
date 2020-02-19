@@ -23,6 +23,7 @@ This API for the Captains app is used to assist users in creating a set of rando
 ### POST /api/auth/login
 Logs in the user and creates json web token.
 The response:
+    <code>
     {
         "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE1ODIxMzYyMTMsInN1YiI6IkpEZW52ZXIifQ.qM6nbtkCWeik-MwrZG5GhXtmCEUPeTU4kGO32RYFTnE",
         "user": {
@@ -30,6 +31,9 @@ The response:
             "username": "JDenver"
         }
     }
+    </code>
+
+***
 
 ### GET /api/item
 
