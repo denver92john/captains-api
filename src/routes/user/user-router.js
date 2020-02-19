@@ -12,7 +12,7 @@ userRouter
         for (const field of ['username', 'password', 're_password']) {
             if (!req.body[field]) {
                 return res.status(400).json({
-                    error: `Missing '${field}' in request body`
+                    error: {message: `Missing '${field}' in request body`}
                 })
             }
         }
