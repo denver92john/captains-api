@@ -11,7 +11,19 @@ describe('List endpoint', () => {
         testItems
     } = helpers.makeListsFixtures()
 
-    
+    before('make knex instance', () => {
+        db = knex({
+            client: 'pg',
+            connection: process.env.TEST_DATABASE_URL
+        })
+        app.set('db', db)
+    })
+
+    after('disconnect from db', () => db.destroy())
+
+    before('cleanup', () => helpers.cleanTables(db))
+
+    afterEach('cleanup', () => helpers.cleanTables(db))
 
     describe('GET /api/list', () => {
         context('Given no lists', () => {
@@ -49,7 +61,44 @@ describe('List endpoint', () => {
         })
     })
 
-    //describe('POST /api/list', () => {})
+    describe('POST /api/list', () => {
+        beforeEach('insert lists', () => {
+            helpers.seedCaptainsTables(
+                db,
+                testUser,
+                testLists,
+                testItems
+            )
+        })
+
+        it(`creates new list, responding with 201 and the new list`, () => {
+            const newList = {
+                list_name: 'July',
+                user_id: testUser.id
+            }
+            return supertest(app)
+                .post('/api/list')
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(newList)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body).to.have.property('id')
+                    expect(res.body.list_name).to.eql(newList.list_name)
+                    expect(res.body.user_id).to.eql(newList.user_id)
+                })
+                .expect(res =>
+                    db
+                        .from('captains_lists')    
+                        .select('*')
+                        .where({id: res.body.id})
+                        .first()
+                        .then(row => {
+                            expect(row.list_name).to.eql(newList.list_name)
+                            expect(row.user_id).to.eql(newList.user_id)
+                        })
+                )
+        })
+    })
     
     describe('GET /api/list/:list_id', () => {
         context('Given no list', () => {
@@ -129,5 +178,43 @@ describe('List endpoint', () => {
         })
     })
 
-    //describe('PATCH /api/list/:list_id', () => {})
+    describe('PATCH /api/list/:list_id', () => {
+        context('Given no item', () => {
+            beforeEach(() => {
+                helpers.seedUser(db, testUser)
+            })
+
+            it('responds with 404', () => {
+                const list_id = 1234;
+                return supertest(app)
+                    .patch(`/api/list/${list_id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUser))
+                    .expect(404, {error: {message: `List doesn't exist`}})
+            })
+        })
+
+        context('Given list exists', () => {
+            beforeEach('insert lists', () => {
+                helpers.seedCaptainsTables(
+                    db,
+                    testUser,
+                    testLists,
+                    testItems
+                )
+            })
+
+            it('responds with 204 and updates the list', () => {
+                const idToUpdate = 1;
+                const listUpdate = {
+                    list_name: 'Updated List',
+                    user_id: testUser.id
+                }
+                return supertest(app)
+                .patch(`/api/list/${idToUpdate}`)
+                .set('Authorization', helpers.makeAuthHeader(testUser))
+                .send(listUpdate)
+                .expect(204)
+            })
+        })
+    })
 })
